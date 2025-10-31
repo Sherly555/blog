@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Future of Distributed Systems | Tech Blog</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        /* Set base font to Inter (sans-serif) for UI and a serif fallback for reading */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0; /* Slate 200 */
+            line-height: 1.6;
+        }
+        /* Custom styles for the main article for better reading */
+        .article-content h2 {
+            font-size: 1.875rem; /* 3xl */
+            font-weight: 700; /* Bold */
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #38bdf8; /* Sky 400 */
+        }
+        .article-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem; /* lg */
+            text-align: justify;
+        }
+        .article-content code {
+            background-color: #1e293b; /* Slate 800 */
+            color: #f87171; /* Red 400 */
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.375rem;
+        }
+        .article-content pre {
+            background-color: #1e293b; /* Slate 800 */
+            color: #cbd5e1; /* Slate 300 */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            border-left: 4px solid #38bdf8;
+            font-size: 0.875rem; /* sm */
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-slate-900 border-b border-sky-800 shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <!-- Logo/Site Title -->
+            <a href="#" class="text-2xl font-bold text-sky-400 tracking-wider">
+                &lt;DevOps Blog /&gt;
+            </a>
+            <!-- Menu Items -->
+            <div class="space-x-4 hidden sm:flex">
+                <a href="#" class="text-slate-300 hover:text-sky-400 transition duration-150 p-2 rounded-lg">Home</a>
+                <a href="#" class="text-slate-300 hover:text-sky-400 transition duration-150 p-2 rounded-lg">Topics</a>
+                <a href="#" class="text-slate-300 hover:text-sky-400 transition duration-150 p-2 rounded-lg">About</a>
+                <a href="#" class="text-sky-400 bg-sky-900/50 hover:bg-sky-800/50 transition duration-150 px-3 py-2 rounded-lg font-medium">Read Now</a>
+            </div>
+            <!-- Mobile Menu Button (Placeholder) -->
+            <button class="sm:hidden text-slate-300 hover:text-sky-400">
+                <!-- SVG Icon for Menu -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+            <!-- Primary Article Column (2/3 width on large screens) -->
+            <div class="lg:col-span-2">
+                <article class="bg-slate-800 p-6 sm:p-10 rounded-xl shadow-2xl border border-slate-700">
+                    
+                    <!-- Article Header -->
+                    <header class="mb-8 border-b border-slate-700 pb-6">
+                        <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight">
+                            The Future of Distributed Systems: Lessons from the Monolith
+                        </h1>
+                        <p class="text-lg text-slate-400">
+                            By <span class="text-sky-400 font-medium">Jane Doe</span> on October 31, 2025 · 
+                            <span class="inline-flex items-center space-x-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"></path></svg>
+                                <span>DevOps, Architecture</span>
+                            </span>
+                        </p>
+                    </header>
+
+                    <!-- Article Body -->
+                    <div class="article-content">
+                        <p>
+                            The transition from monolithic applications to distributed systems has been one of the defining characteristics of modern software architecture. While microservices offer unprecedented scalability and flexibility, they introduce significant complexity, particularly in deployment and monitoring. Our journey into DevOps aims to tame this complexity.
+                        </p>
+
+                        <h2>The Containerization Mandate (Phase 2)</h2>
+                        <p>
+                            Containerization, primarily led by <span class="text-green-400 font-semibold">Docker</span>, solved the age-old problem of "it works on my machine." By bundling the application and all its dependencies, we ensure consistency from local development all the way through to production on <span class="text-blue-400 font-semibold">AKS</span>. This isolation is non-negotiable for stable distributed deployments.
+                        </p>
+                        
+                        <p>
+                            A typical Dockerfile for a Node.js application might look something like this:
+                        </p>
+                        <pre><code>
+# Use an official Node.js runtime as a parent image
+FROM node:20-alpine
+# Set the working directory
+WORKDIR /usr/src/app
+# Copy package.json and package-lock.json
+COPY package*.json ./
+# Install app dependencies
+RUN npm install
+# Copy app source code
+COPY . .
+# Expose the port the app runs on
+EXPOSE 8080
+# Define the command to run the app
+CMD ["npm", "start"]
+                        </code></pre>
+
+                        <h2>Infrastructure as Code (IaC) with Terraform (Phase 3)</h2>
+                        <p>
+                            Managing infrastructure manually across multiple environments is error-prone. <span class="text-green-400 font-semibold">Terraform</span> provides the declarative framework necessary to define our Azure resources—from the Resource Group to the AKS cluster—as code. This allows us to track changes, review configurations, and ensure idempotency across deployments. The use of IaC is crucial for the repeatability required in a CI/CD pipeline.
+                        </p>
+
+                        <h2>The CI/CD Link (Phase 5)</h2>
+                        <p>
+                            Whether using <span class="text-purple-400 font-semibold">GitHub Actions</span> or Jenkins, the CI/CD pipeline acts as the orchestrator. A successful commit to the main branch should trigger a sequence: build the Docker image, push it to ACR, provision or update the infrastructure via Terraform, and finally, deploy the updated Kubernetes manifests using Ansible or kubectl. This full automation is the essence of modern DevOps.
+                        </p>
+                        
+                        <p>
+                            In conclusion, mastering distributed systems is less about the complexity of the services themselves and more about mastering the tools—Git, Docker, Terraform, Ansible, and Kubernetes—that manage their lifecycle.
+                        </p>
+                    </div>
+
+                    <!-- Article Footer/Tags -->
+                    <footer class="mt-10 pt-6 border-t border-slate-700">
+                        <div class="text-sm text-slate-400 space-x-3">
+                            <span class="font-semibold text-slate-300">Tags:</span>
+                            <span class="bg-slate-700 px-3 py-1 rounded-full hover:bg-slate-600 cursor-pointer transition">#Kubernetes</span>
+                            <span class="bg-slate-700 px-3 py-1 rounded-full hover:bg-slate-600 cursor-pointer transition">#Terraform</span>
+                            <span class="bg-slate-700 px-3 py-1 rounded-full hover:bg-slate-600 cursor-pointer transition">#CI/CD</span>
+                        </div>
+                    </footer>
+
+                </article>
+            </div>
+
+            <!-- Sidebar Column (1/3 width on large screens) -->
+            <aside class="lg:col-span-1 space-y-8">
+                <!-- Author Card -->
+                <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700">
+                    <h3 class="text-xl font-bold text-sky-400 mb-4 border-b border-slate-700 pb-2">About The Author</h3>
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/100x100/334155/e2e8f0?text=JD" onerror="this.onerror=null; this.src='https://placehold.co/100x100/334155/e2e8f0?text=JD';" alt="Author Profile" class="w-24 h-24 rounded-full mb-4 border-4 border-sky-600">
+                        <p class="font-semibold text-white">Jane Doe</p>
+                        <p class="text-sm text-slate-400 text-center mt-1">Senior DevOps Architect with 10+ years specializing in cloud automation and distributed systems.</p>
+                        <button class="mt-4 w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 rounded-lg transition">Follow</button>
+                    </div>
+                </div>
+
+                <!-- Recent Posts -->
+                <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700">
+                    <h3 class="text-xl font-bold text-sky-400 mb-4 border-b border-slate-700 pb-2">Recent Posts</h3>
+                    <ul class="space-y-4">
+                        <li class="group cursor-pointer">
+                            <a href="#" class="text-slate-300 group-hover:text-sky-400 transition block">
+                                <p class="font-medium">Debugging Kubernetes: A Practical Guide</p>
+                                <p class="text-xs text-slate-500">2 days ago</p>
+                            </a>
+                        </li>
+                        <li class="group cursor-pointer">
+                            <a href="#" class="text-slate-300 group-hover:text-sky-400 transition block">
+                                <p class="font-medium">Ansible vs. Terraform: When to Use Which Tool</p>
+                                <p class="text-xs text-slate-500">1 week ago</p>
+                            </a>
+                        </li>
+                        <li class="group cursor-pointer">
+                            <a href="#" class="text-slate-300 group-hover:text-sky-400 transition block">
+                                <p class="font-medium">Monitoring Pipelines with Grafana and Prometheus</p>
+                                <p class="text-xs text-slate-500">1 month ago</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-sky-800 mt-12 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-500 text-sm">
+            &copy; 2025 DevOps Blog. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
