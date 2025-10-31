@@ -8,7 +8,7 @@ RUN rm /usr/share/nginx/html/index.html
 # Copy the static HTML file into the default Nginx public directory.
 # We'll rename it to index.html so Nginx serves it automatically.
 # Assuming 'blog_reader.html' is in the same directory as this Dockerfile.
-COPY blog_reader.html /usr/share/nginx/html/index.html
+COPY index.html /usr/share/nginx/html/index.html
 
 # The default Nginx configuration exposes port 80.
 # EXPOSE is purely informational, telling the user which port to map.
