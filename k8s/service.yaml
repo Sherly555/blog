@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+name: blog-reader-service
+spec:
+
+Use LoadBalancer to simulate the external IP exposure required by the project.
+
+If testing locally on Minikube, this will create a NodePort service internally.
+
+type: LoadBalancer
+ports:
+- port: 80
+targetPort: 80
+protocol: TCP
+selector:
+app: blog-reader

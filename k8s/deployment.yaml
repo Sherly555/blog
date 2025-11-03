@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: blog-reader-deployment
+labels:
+app: blog-reader
+spec:
+replicas: 3
+selector:
+matchLabels:
+app: blog-reader
+template:
+metadata:
+labels:
+app: blog-reader
+spec:
+containers:
+- name: blog-reader-container
+# Placeholder for the dynamic image created by the pipeline.
+# This image name MUST be updated by the CI/CD process.
+image: <ACR_LOGIN_SERVER>/elegant-blog-reader:<IMAGE_TAG>
+ports:
+- containerPort: 80
+resources:
+limits:
+memory: "128Mi"
+cpu: "500m"
