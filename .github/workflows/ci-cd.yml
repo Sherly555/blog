@@ -1,90 +1,29 @@
-name: DevOps Project Pipeline - Build, Provision, Deploy
+name: Blog App CI/CD
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'Dockerfile'
-      - 'blog_reader.html'
-      - 'k8s/**'
-
-env:
-  # The base name for the Docker image
-  IMAGE_NAME: elegant-blog-reader
-  # Generate a unique tag based on the commit SHA
-  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
-  # PHASE 3: Infrastructure Provisioning (IaC) - Simulated
-  provision_infrastructure:
+  build_and_test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Terraform Init and Validate
-        working-directory: ./terraform
-        run: terraform init
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Terraform Apply (Simulated IaC)
-        working-directory: ./terraform
-        run: terraform apply -auto-approve
-        # NOTE: This step only runs the 'null_resource' locally, as instructed.
-        # In a real scenario, this provisions AKS and ACR.
-
-  # PHASE 2 & 5: Build and Push Docker Image
-  build_and_push_image:
-    needs: provision_infrastructure # Must run after IaC is finished
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      # 1. Log in to ACR (Requires Secrets: ACR_LOGIN_SERVER, ACR_USERNAME, ACR_PASSWORD)
-      - name: Docker Login to ACR (Simulated Credentials)
+      - name: Build Docker image
         run: |
-          echo "Simulating login to ACR: ${{ secrets.ACR_LOGIN_SERVER }}"
-          # In a real environment, you would use:
-          # docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }}
+          docker build -t blog-app .
 
-      # 2. Build the Docker Image (Phase 2)
-      - name: Build Docker Image
-        run: docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
-
-      # 3. Tag and Push to ACR (Phase 2)
-      - name: Tag and Push Image to ACR
+      - name: Run container test
         run: |
-          IMAGE_FQDN=${{ secrets.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          echo "Simulating image push: $IMAGE_FQDN"
-          # In a real environment, you would use:
-          # docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} $IMAGE_FQDN
-          # docker push $IMAGE_FQDN
-
-  # PHASE 4 & 6: Deployment to Kubernetes
-  deploy_to_aks:
-    needs: build_and_push_image # Must run after image is pushed
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      # 1. Update K8s Manifests with the correct image tag
-      - name: Substitute Image Tag in Deployment Manifest
-        run: |
-          # Replace the placeholder in the deployment.yaml with the full tagged image path
-          IMAGE_FQDN=${{ secrets.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          sed -i "s|<ACR_LOGIN_SERVER>/elegant-blog-reader:<IMAGE_TAG>|$IMAGE_FQDN|g" ./k8s/deployment.yaml
-
-      # 2. Ansible/Kubectl Simulation (Phase 4)
-      - name: Deploy to Kubernetes (Simulated Kubectl Apply)
-        run: |
-          echo "--- Beginning Kubernetes Deployment (Ansible Phase 4 Simulation) ---"
-          # In a real AKS/Kubernetes environment, you would use Kubectl or an Ansible playbook:
-          # kubectl apply -f ./k8s/deployment.yaml
-          # kubectl apply -f ./k8s/service.yaml
-          echo "Simulated applying deployment.yaml with image: $IMAGE_FQDN"
-          echo "--- Deployment Simulation Complete ---"
-      
-      # 3. Validation (Phase 6)
-      - name: Verify Deployment Status (Simulated)
-        run: echo "Simulated kubectl get pods and service validation complete."
+          docker run -d -p 8080:80 --name blog-app blog-app
+          sleep 5
+          docker ps
+          docker stop blog-app
+          docker rm blog-app
